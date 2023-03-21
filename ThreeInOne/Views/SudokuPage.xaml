@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="ThreeInOne.Views.SudokuPage"
+             xmlns:vm="clr-namespace:ThreeInOne.ViewModels.Sudoku"
+             xmlns:converters="clr-namespace:ThreeInOne.WPFStuff.Converters"
+             x:DataType="vm:SudokuPageViewModel"
+             Title="SudokuPage" Loaded="ContentPage_Loaded">
+    <ContentPage.Resources>
+        <converters:InversBoolean x:Key="InversBoolean"/>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="IsEnabled" Value="{Binding SolveBoardCommand.IsRunning, Converter={StaticResource InversBoolean}}"/>
+        </Style>
+    </ContentPage.Resources>
+    <Grid Margin="5" RowDefinitions="50,10,*">
+        <Grid ColumnDefinitions="*,*,*">
+            <Button Grid.Column="0" Text="Clear" Command="{Binding ClearBoardCommand}"/>
+            <Button Grid.Column="1" Text="Fill Example" Command="{Binding FillBoardCommand}"/>
+            <Button Grid.Column="2" Text="Solve" Command="{Binding SolveBoardCommand}"/>
+        </Grid>
+        <Grid Grid.Row="2" x:Name="Playground" RowDefinitions="*,*,*,*,*,*,*,*,*" ColumnDefinitions="*,*,*,*,*,*,*,*,*"/>
+        <Grid Grid.Row="2" RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
+            <Grid.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Stroke" Value="Black"/>
+                    <Setter Property="StrokeThickness" Value="2"/>
+                </Style>
+            </Grid.Resources>
+            <Border Grid.Row="0" Grid.Column="0"/>
+            <Border Grid.Row="0" Grid.Column="1"/>
+            <Border Grid.Row="0" Grid.Column="2"/>
+            <Border Grid.Row="1" Grid.Column="0"/>
+            <Border Grid.Row="1" Grid.Column="1"/>
+            <ActivityIndicator Grid.Row="1" Grid.ColumnSpan="3"
+                               WidthRequest="150" HeightRequest="150"
+                               IsRunning="{Binding SolveBoardCommand.IsRunning}"
+                               IsVisible="{Binding SolveBoardCommand.IsRunning}"
+                               Color="#512BD4"/>
+            <Border Grid.Row="1" Grid.Column="2"/>
+            <Border Grid.Row="2" Grid.Column="0"/>
+            <Border Grid.Row="2" Grid.Column="1"/>
+            <Border Grid.Row="2" Grid.Column="2"/>
+        </Grid>
+    </Grid>
+</ContentPage>

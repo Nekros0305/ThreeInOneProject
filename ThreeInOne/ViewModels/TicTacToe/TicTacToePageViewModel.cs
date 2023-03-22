@@ -72,7 +72,6 @@ namespace ThreeInOne.ViewModels.TicTacToe
 
         private static WinningLine? _winLines;
 
-
         private IDataBaseSettings _settings = new DefaultSettings();
         public List<HighscoresListDto> Records => new GameRecordRepository(_settings).GetHighScores();
 

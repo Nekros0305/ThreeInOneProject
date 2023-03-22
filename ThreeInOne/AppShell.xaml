@@ -3,31 +3,28 @@
     x:Class="ThreeInOne.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:ThreeInOne.Views"
-    xmlns:sys="clr-namespace:System;assembly=netstandard"
-    xmlns:vm="clr-namespace:ThreeInOne.ViewModels"
-    x:DataType="vm:ShellViewModel"
+    xmlns:pages="clr-namespace:ThreeInOne.Views"
     Shell.FlyoutBehavior="Flyout"
     Shell.FlyoutWidth="150">
 
     <ShellContent
         Title="Main Page"
-        ContentTemplate="{DataTemplate views:MainPage}"
+        ContentTemplate="{DataTemplate pages:MainPage}"
         Route="MainPage"/>
 
     <ShellContent
         Icon="sun.png"
         Title="Sun Info"
-        ContentTemplate="{DataTemplate views:SunInfoPage}"
+        ContentTemplate="{DataTemplate pages:SunInfoPage}"
         Route="SunInfoPage"/>
 
     <ShellContent
         Title="Sudoku"
-        ContentTemplate="{DataTemplate views:SudokuPage}"
+        ContentTemplate="{DataTemplate pages:SudokuPage}"
         Route="Sudoku"/>
 
     <ShellContent
         Title="Tic Tac Toe"
-        ContentTemplate="{DataTemplate views:TicTacToePage}"
+        ContentTemplate="{x:DataTemplate pages:TicTacToePage}"
         Route="TicTacToe"/>
 </Shell>

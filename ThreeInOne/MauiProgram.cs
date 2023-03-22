@@ -79,7 +79,6 @@ public static class MauiProgram
             c.BaseAddress = new Uri("https://api.sunrise-sunset.org/");
             c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }).SingleTimeoutWithRetryPolicy();
-
         var toRegister = configuration.GetSection(nameof(ContainerConfig))
             .GetValue<string>(nameof(ContainerConfig.RegisterLocationFrom));
 
@@ -88,7 +87,6 @@ public static class MauiProgram
             case "Api":
                 var url = configuration.GetSection(nameof(ContainerConfig))
                     .GetValue<string>(nameof(ContainerConfig.RegisterApiUrl));
-
                 sc.AddHttpClient(nameof(LocationServiceFromApi), c =>
                 {
                     c.BaseAddress = new Uri(url!);
@@ -111,8 +109,6 @@ public static class MauiProgram
 
     private static IServiceCollection RegisterPages(this IServiceCollection sc)
     {
-        //sc.AddSingleton<ShellViewModel>();
-
         sc.AddSingleton<MainPage>();
         sc.AddSingleton<MainPageViewModel>();
 

@@ -2,7 +2,7 @@
 {
     public interface IDataBaseSettings
     {
-        public string Path { get; internal set; }
-        public string FileName { get; internal set; }
+        public string PathToFile { get; set; }
+        public string DBFileName { get;  set; }
     }
 }

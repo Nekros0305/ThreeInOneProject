@@ -30,7 +30,7 @@ namespace TicTacToe.Data.Contextes
         internal GameRecordContext CreateContext()
         {
             var options = new DbContextOptionsBuilder<GameRecordContext>()
-                .UseSqlite($"Data Source={Path.Combine(_settings.Path, _settings.FileName)}")
+                .UseSqlite($"Data Source={Path.Combine(_settings.PathToFile, _settings.DBFileName)}")
                 .Options;
 
             return new GameRecordContext(options);

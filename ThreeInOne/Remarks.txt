@@ -1,11 +1,12 @@
 - find out where does Android saves files
 - configure paths to me more Maui oriented
-- find out why does tictactoe breaks on release mode(propably bd)
+- find out why does tictactoe breaks on release mode(propably bd) :Nope, keep looking
 - try creating style adaptation for android
 - find out how exacly release profile works on Maui, to avoid loosing the project again
 
-- Remember to try pushing it on Git for old Mr. noReply(Marco)
-- if it works, update your older repos to be save
+- Remember to try pushing it on Git for old Mr. noReply(Marco): failed
+- if it works, update your older repos to be save: failed
+
 - do more backups/copies
 
 - consider writing down your expierience with MAUI for future(possible presentation)

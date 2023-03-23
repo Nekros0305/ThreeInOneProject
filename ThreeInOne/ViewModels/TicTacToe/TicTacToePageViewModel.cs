@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.UI.Xaml.Controls;
 using ThreeInOne.Models.TicTacToe;
 using TicTacToe.Back;
 using TicTacToe.Back.Models.Enums;
@@ -72,7 +71,15 @@ namespace ThreeInOne.ViewModels.TicTacToe
 
         private static WinningLine? _winLines;
 
-        private IDataBaseSettings _settings = new DefaultSettings();
+        private IDataBaseSettings _settings = GetSettings();
+
+        private static IDataBaseSettings GetSettings()
+        {
+            IDataBaseSettings settings = new MauiSettings();
+            settings.PathToFile = FileSystem.AppDataDirectory;
+            return settings;
+        }
+
         public List<HighscoresListDto> Records => new GameRecordRepository(_settings).GetHighScores();
 
         [RelayCommand(CanExecute = nameof(CanStart))]
@@ -93,7 +100,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
             else
                 PlayerOName = playerO.PlayerName;
 
-            CurrentGame = new Game(playerX, playerO, true);
+            CurrentGame = new Game(playerX, playerO, true, _settings);
 
             UpdateBoard();
         }

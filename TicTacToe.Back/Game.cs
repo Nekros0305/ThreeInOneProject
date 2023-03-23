@@ -30,9 +30,9 @@ namespace TicTacToe.Back
         private GameState State { get; set; } = GameState.Ongoing;
 
         private readonly bool _saveInDB;
-        private readonly GameRecordRepository GameRepo = new(new DefaultSettings());
+        private readonly GameRecordRepository GameRepo;
 
-        public GameResult Result { get; private set; }
+        public GameResult? Result { get; private set; }
 
         /// <summary>
         /// Access to first player with sign X
@@ -56,10 +56,15 @@ namespace TicTacToe.Back
         /// </summary>
         /// <param name="playerX"></param>
         /// <param name="playerO"></param>
-        public Game(BasePlayer playerX, BasePlayer playerO, bool saveInDB = false)
+        public Game(BasePlayer playerX, BasePlayer playerO, bool saveInDB = false, IDataBaseSettings? settings = null)
         {
             _board = new string[9];
             _saveInDB = saveInDB;
+
+            if (settings != null)
+                GameRepo = new(settings);
+            else
+                GameRepo = new(new DefaultSettings());
 
             PlayerX = playerX;
             PlayerX.Sign = "X";

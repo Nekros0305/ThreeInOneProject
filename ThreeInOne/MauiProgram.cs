@@ -45,6 +45,13 @@ public static class MauiProgram
                     .Build();
         builder.Configuration.AddConfiguration(config);
 
+        //var fileorder = FileSystem.Current.AppDataDirectory;
+
+        //if (false)
+        //{
+
+        //}
+
         builder.Services
             .Config(builder.Configuration)
             .RegisterServices(builder.Configuration)

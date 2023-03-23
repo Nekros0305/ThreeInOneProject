@@ -2,7 +2,7 @@
 {
     public class DefaultSettings : IDataBaseSettings
     {
-        string IDataBaseSettings.Path { get => AppDomain.CurrentDomain.BaseDirectory; set { } }
-        string IDataBaseSettings.FileName { get => "GameRecords.db"; set { } }
+        string IDataBaseSettings.PathToFile { get => AppDomain.CurrentDomain.BaseDirectory; set { } }
+        string IDataBaseSettings.DBFileName { get => "GameRecords.db"; set { } }
     }
 }

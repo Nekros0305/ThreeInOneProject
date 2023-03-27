@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ThreeInOne.Interfaces.SunInfo;
 using ThreeInOne.Models.SunInfo;
 
+//service usable only on windows cause programmer was unable to work with files on Android
 namespace ThreeInOne.Services.SunInfo;
 internal class LocationServiceFromIp : ILocationService
 {

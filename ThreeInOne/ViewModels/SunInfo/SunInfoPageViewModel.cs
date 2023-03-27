@@ -25,7 +25,7 @@ namespace ThreeInOne.ViewModels.SunInfo
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
-        private bool _executable = false;
+        private bool _executable;
 
         private async Task<LocalSunInfo> GetSunInfo(CancellationToken cancellationToken)
         {
@@ -33,6 +33,7 @@ namespace ThreeInOne.ViewModels.SunInfo
             {
                 Executable = false;
                 var result = await _sunInfoService.GetSunInfo(cancellationToken);
+                await Task.Delay(1000, cancellationToken);
                 Executable = true;
                 return result;
             }

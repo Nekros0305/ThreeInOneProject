@@ -16,7 +16,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ImageButton HorizontalOptions="End" VerticalOptions="Start"
-                     Source="refresh.png"
+                     Source="refresh.png" x:Name="buttonRefresh"
                      BorderWidth="0" Background="Transparent" 
                      WidthRequest="35" HeightRequest="35"
                      Command="{Binding RefreshCommand}"/>
@@ -28,7 +28,7 @@
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                             IsVisible="{Binding SunInfo.IsLoading}">
                     <Label Text="Loading..." FontSize="26"/>
-                    <ActivityIndicator IsRunning="True" Color="Orange"/>
+                    <ActivityIndicator IsRunning="{Binding SunInfo.IsLoading}" Color="Orange"/>
                 </VerticalStackLayout>
                 <Grid IsVisible="{Binding SunInfo.IsLoading, Converter={StaticResource InversBoolean}}">
                     <Grid.RowDefinitions>

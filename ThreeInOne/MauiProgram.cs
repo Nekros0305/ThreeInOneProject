@@ -101,10 +101,12 @@ public static class MauiProgram
                 });
                 sc.AddTransient<ILocationService, LocationServiceFromApi>();
                 break;
+#if WINDOWS
             case "Ip":
                 sc.AddHttpClient<IIpService, IpServiceReal>();
                 sc.AddTransient<ILocationService, LocationServiceFromIp>();
                 break;
+#endif
             default:
                 sc.AddTransient<ILocationService, LocationServiceFake>();
                 break;

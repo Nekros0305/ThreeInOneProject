@@ -1,7 +1,8 @@
-- find out where does Android saves files
-- configure paths to me more Maui oriented
+22.03:
+- find out where does Android saves files: not worth it
+- configure paths to me more Maui oriented :partially done
 - find out why does tictactoe breaks on release mode(propably bd) :Nope, keep looking
-- try creating style adaptation for android
+- try creating style adaptation for android : partially done
 - find out how exacly release profile works on Maui, to avoid loosing the project again
 
 - Remember to try pushing it on Git for old Mr. noReply(Marco): failed
@@ -10,3 +11,6 @@
 - do more backups/copies
 
 - consider writing down your expierience with MAUI for future(possible presentation)
+
+23.03:
+-find out why does android version on UI side works incorrectly(it does not display border and entrys generated programmically)

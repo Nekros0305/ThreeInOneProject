@@ -13,21 +13,29 @@
         <converters:GameToMessageConverter x:Key="GameToMessageConverter"/>
         <converters:WinRatioToPercentageValue x:Key="WinRatioToPercentageValue"/>
     </ContentPage.Resources>
-    <Grid RowDefinitions="100,20,*,30,auto" ColumnDefinitions="3*,auto">
-        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="5">
+    <Grid RowDefinitions="100,20,*,30,auto" ColumnDefinitions="*,auto">
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center">
+            <HorizontalStackLayout.Resources>
+                <Style TargetType="Picker">
+                    <Setter Property="BackgroundColor" Value="DarkGray"/>
+                    <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                    <Setter Property="WidthRequest" Value="100"/>
+                    <Setter Property="ItemsSource" Value="{Binding Players}"/>
+                </Style>
+                <Style TargetType="Entry">
+                    <Setter Property="Placeholder" Value="Enter player name"/>
+                    <Setter Property="MaxLength" Value="15"/>
+                </Style>
+            </HorizontalStackLayout.Resources>
             <VerticalStackLayout MinimumWidthRequest="120">
-                <Picker BackgroundColor="DarkGray"
-                        ItemsSource="{Binding Players}" ItemDisplayBinding="{Binding PlayerName}" SelectedItem="{Binding PlayerX}"/>
-                    <Entry Text="{Binding PlayerXName}" Placeholder="Player X name"
-                       IsVisible="{Binding PlayerXNameNeeded}" MaxLength="15"/>
+                <Picker ItemDisplayBinding="{Binding PlayerName}" SelectedItem="{Binding PlayerX}"/>
+                <Entry Text="{Binding PlayerXName}" IsVisible="{Binding PlayerXNameNeeded}"/>
             </VerticalStackLayout>
             <Button Text="Start" Command="{Binding GameStartCommand}"
                     HeightRequest="100" WidthRequest="100"/>
             <VerticalStackLayout MinimumWidthRequest="120">
-                <Picker BackgroundColor="DarkGray" HorizontalOptions="End"
-                        ItemsSource="{Binding Players}" ItemDisplayBinding="{Binding PlayerName}" SelectedItem="{Binding PlayerO}"/>
-                <Entry Text="{Binding PlayerOName}" Placeholder="Player O name"
-                       IsVisible="{Binding PlayerONameNeeded}" MaxLength="15" HorizontalOptions="End"/>
+                <Picker ItemDisplayBinding="{Binding PlayerName}" SelectedItem="{Binding PlayerO}"/>
+                <Entry Text="{Binding PlayerOName}" IsVisible="{Binding PlayerONameNeeded}"/>
             </VerticalStackLayout>
         </HorizontalStackLayout>
         <Label Grid.Row="1" HorizontalOptions="Center" Text="{Binding InGamePlayers}"/>
@@ -70,35 +78,38 @@
         </Grid>
         <Label Grid.Row="3" Text="{Binding CurrentGame, Mode=OneWay, Converter={StaticResource GameToMessageConverter}}"
                HorizontalOptions="Center" VerticalOptions="Center" FontSize="20"/>
-        <ListView Grid.Column="1" Grid.RowSpan="5" ItemsSource="{Binding Records}"
+
+        <Border Grid.Column="1" Grid.RowSpan="5" IsVisible="{OnPlatform Android=False, WinUI=True}" Opacity="100">
+            <ListView ItemsSource="{Binding Records}"
                   IsVisible="{Binding CurrentGame.IsFinished}" MaximumWidthRequest="400" SelectionMode="Single">
-            <ListView.Header>
-                <Grid ColumnSpacing="5" Padding="10,0" RowDefinitions="20,2" ColumnDefinitions="50,*,60,80">
-                    <Grid.Resources>
-                        <Style TargetType="Label">
-                            <Setter Property="FontAttributes" Value="Bold"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Label Grid.Column="0" Text="Place"/>
-                    <Label Grid.Column="1" Text="Name"/>
-                    <Label Grid.Column="2" Text="Count"/>
-                    <Label Grid.Column="3" Text="Win Ratio"/>
-                    <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Fill="black"/>
-                </Grid>
-            </ListView.Header>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="records:HighscoresListDto">
-                    <ViewCell>
-                        <Grid ColumnSpacing="5" Padding="10,5" RowDefinitions="20,2" ColumnDefinitions="50,*,60,80">
-                            <Label Grid.Column="0" Text="{Binding Place,StringFormat='{}{0:0}.'}"/>
-                            <Label Grid.Column="1" Text="{Binding PlayerName}"/>
-                            <Label Grid.Column="2" Text="{Binding GamesAmount}"/>
-                            <Label Grid.Column="3" Text="{Binding WinRatio, StringFormat='{}{0:0.## %}'}"/>
-                            <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Fill="black"/>
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.Header>
+                    <Grid ColumnSpacing="5" Padding="10,0" RowDefinitions="20,2" ColumnDefinitions="50,*,60,80">
+                        <Grid.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="FontAttributes" Value="Bold"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Label Grid.Column="0" Text="Place"/>
+                        <Label Grid.Column="1" Text="Name"/>
+                        <Label Grid.Column="2" Text="Count"/>
+                        <Label Grid.Column="3" Text="Win Ratio"/>
+                        <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Fill="black"/>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="records:HighscoresListDto">
+                        <ViewCell>
+                            <Grid ColumnSpacing="5" Padding="10,5" RowDefinitions="20,2" ColumnDefinitions="50,*,60,80">
+                                <Label Grid.Column="0" Text="{Binding Place,StringFormat='{}{0:0}.'}"/>
+                                <Label Grid.Column="1" Text="{Binding PlayerName}"/>
+                                <Label Grid.Column="2" Text="{Binding GamesAmount}"/>
+                                <Label Grid.Column="3" Text="{Binding WinRatio, StringFormat='{}{0:0.## %}'}"/>
+                                <Rectangle Grid.Row="1" Grid.ColumnSpan="4" Fill="black"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </Grid>
 </ContentPage>

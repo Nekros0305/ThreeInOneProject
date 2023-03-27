@@ -32,7 +32,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
         private PlayerType? _playerX;
         partial void OnPlayerXChanged(PlayerType? value)
         {
-            if (value.PlayerName != "Human")
+           if (value.PlayerName != "Human")
                 PlayerXName = value.PlayerName;
             PlayerXType = value.PlayerCat;
         }

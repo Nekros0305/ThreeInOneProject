@@ -4,8 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:ThreeInOne.Views"
+    
+    FlyoutBackgroundColor="AliceBlue"
     Shell.FlyoutBehavior="Flyout"
-    Shell.FlyoutWidth="150">
+    Shell.FlyoutWidth="{OnPlatform Android=180, WinUI=150}">
 
     <ShellContent
         Title="Main Page"

@@ -39,7 +39,7 @@ namespace ThreeInOne.ViewModels.SunInfo
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to get SunInfo");
+                _logger.LogError(ex, $"{nameof(SunInfoPageViewModel)}: Failed to get SunInfo");
                 Executable = true;
                 throw;
             }

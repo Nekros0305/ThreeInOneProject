@@ -35,22 +35,13 @@ public static class MauiProgram
             }).Configuration.SetBasePath(AppContext.BaseDirectory);
 
         var a = Assembly.GetExecutingAssembly();
-        var stream = a.GetManifestResourceStream("ThreeInOne.appsettings.json");
-
-        if (stream == null)
-            throw new FileNotFoundException("Required Settings Manifest was not found");
+        var stream = a.GetManifestResourceStream("ThreeInOne.appsettings.json")
+            ?? throw new FileNotFoundException("Required Settings Manifest was not found");
 
         var config = new ConfigurationBuilder()
                     .AddJsonStream(stream)
                     .Build();
         builder.Configuration.AddConfiguration(config);
-
-        //var fileorder = FileSystem.Current.AppDataDirectory;
-
-        //if (false)
-        //{
-
-        //}
 
         builder.Services
             .Config(builder.Configuration)

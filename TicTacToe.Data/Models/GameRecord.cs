@@ -20,11 +20,11 @@ namespace TicTacToe.Data.Models
         [Required]
         public string PlayerOType { get; set; } = null!;
 
-        public int State { get; set; } //TODO: change to Enum later
+        public int State { get; set; }
 
         [Required]
         public string Board { get; set; } = null!;
 
-        public int WinningLine { get; set; } //TODO: change to Enum later
+        public int WinningLine { get; set; }
     }
 }

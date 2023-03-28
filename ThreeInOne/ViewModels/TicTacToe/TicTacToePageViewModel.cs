@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using ThreeInOne.Models.TicTacToe;
 using TicTacToe.Back;
 using TicTacToe.Back.Models.Enums;
@@ -13,12 +14,17 @@ namespace ThreeInOne.ViewModels.TicTacToe
 {
     public partial class TicTacToePageViewModel : ObservableObject, IDrawable
     {
-        private readonly IMessenger _messenger;
+        private readonly IMessenger? _messenger;
+        private readonly ILogger<TicTacToePageViewModel>? _logger;
+
         public TicTacToePageViewModel()
-        {}
-        public TicTacToePageViewModel(IMessenger messenger)
+        { }
+        public TicTacToePageViewModel(
+            IMessenger messenger,
+            ILogger<TicTacToePageViewModel> logger)
         {
             _messenger = messenger;
+            _logger = logger;
         }
 
         [ObservableProperty]
@@ -40,7 +46,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
         private PlayerType? _playerX;
         partial void OnPlayerXChanged(PlayerType? value)
         {
-            if (value.PlayerName != "Human")
+            if (value!.PlayerName != "Human")
                 PlayerXName = value.PlayerName;
             PlayerXType = value.PlayerCat;
         }
@@ -49,7 +55,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
         private PlayerType? _playerO;
         partial void OnPlayerOChanged(PlayerType? value)
         {
-            if (value.PlayerName != "Human")
+            if (value!.PlayerName != "Human")
                 PlayerOName = value.PlayerName;
             PlayerOType = value.PlayerCat;
         }
@@ -108,8 +114,8 @@ namespace ThreeInOne.ViewModels.TicTacToe
             else
                 PlayerOName = playerO.PlayerName;
 
+            _logger!.LogInformation($"{nameof(TicTacToePageViewModel)}: game was started");
             CurrentGame = new Game(playerX, playerO, true, _settings);
-
             UpdateBoard();
         }
 
@@ -120,6 +126,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
             if (!string.IsNullOrWhiteSpace(Spots[spot]))
                 return;
             CurrentGame!.TakeSpot(spot);
+            _logger!.LogInformation($"{nameof(TicTacToePageViewModel)}: Spot number: {spot} was taken by {CurrentGame.CurrentPlayer}");
             UpdateBoard();
         }
 
@@ -142,13 +149,13 @@ namespace ThreeInOne.ViewModels.TicTacToe
 
             if (CurrentGame!.IsFinished)
             {
+                _logger!.LogInformation($"{nameof(TicTacToePageViewModel)}: Game was finished");
                 WhoWon = CurrentGame.GetWinner();
                 GameStartCommand.NotifyCanExecuteChanged();
                 OnPropertyChanged(nameof(CurrentGame));
 
-                //TODO: tell view to update its graphicsView
                 _winLines = CurrentGame?.GetResult()?.TheWinningLine;
-                _messenger.Send(new GraphicUpdateMessage(string.Empty));
+                _messenger!.Send(new GraphicUpdateMessage(string.Empty));
             }
             TakeSpotCommand.NotifyCanExecuteChanged();
         }
@@ -157,6 +164,8 @@ namespace ThreeInOne.ViewModels.TicTacToe
         {
             if (_winLines is null)
                 return;
+
+            _logger!.LogInformation($"{nameof(TicTacToePageViewModel)}: beggining drawing Canvas");
 
             canvas.StrokeSize = 4;
             canvas.StrokeColor = Colors.Blue;
@@ -179,6 +188,8 @@ namespace ThreeInOne.ViewModels.TicTacToe
                 canvas.DrawLine(new Point(0, dirtyRect.Height * 0.5), new Point(dirtyRect.Width, dirtyRect.Height * 0.5));
             if (_winLines.Value.HasFlag(WinningLine.Horizontal3))
                 canvas.DrawLine(new Point(0, dirtyRect.Height * 0.85), new Point(dirtyRect.Width, dirtyRect.Height * 0.85));
+
+            _logger!.LogInformation($"{nameof(TicTacToePageViewModel)}: Canvas drawed successfully");
         }
 
         public string InGamePlayers => $"{PlayerXName} vs {PlayerOName}";

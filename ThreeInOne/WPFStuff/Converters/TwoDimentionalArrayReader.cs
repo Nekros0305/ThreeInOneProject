@@ -23,7 +23,6 @@ class TwoDimentionalArrayReader : IValueConverter
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        //TODO: Find better Solution
         WeakReferenceMessenger.Default.Send(new AddToBoardMessage($"{value},{parameter}"));
         return string.Empty;
     }

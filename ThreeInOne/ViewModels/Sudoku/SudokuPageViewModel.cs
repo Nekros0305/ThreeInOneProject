@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using Sudoku.Code;
 using ThreeInOne.Models.Sudoku;
 
@@ -10,10 +11,15 @@ namespace ThreeInOne.ViewModels.Sudoku
         IRecipient<AddToBoardMessage>
     {
         private readonly IMessenger _messenger;
-        public SudokuPageViewModel(IMessenger messenger)
+        private readonly ILogger<SudokuPageViewModel> _logger;
+
+        public SudokuPageViewModel(
+            IMessenger messenger,
+            ILogger<SudokuPageViewModel> logger)
         {
             messenger.RegisterAll(this);
             _messenger = messenger;
+            _logger = logger;
         }
 
         private Solver? _sudokuSolver;
@@ -28,29 +34,38 @@ namespace ThreeInOne.ViewModels.Sudoku
         private void FillBoard()
         {
             Board = new string[9, 9];
-            #region SetWikipediaExample
-            _sudokuSolver = new();
-            _sudokuSolver.SetValue(1, 0, 3);
-            _sudokuSolver.SetValue(3, 1, 1);
-            _sudokuSolver.SetValue(4, 1, 9);
-            _sudokuSolver.SetValue(5, 1, 5);
-            _sudokuSolver.SetValue(2, 2, 8);
-            _sudokuSolver.SetValue(7, 2, 6);
-            _sudokuSolver.SetValue(0, 3, 8);
-            _sudokuSolver.SetValue(4, 3, 6);
-            _sudokuSolver.SetValue(0, 4, 4);
-            _sudokuSolver.SetValue(3, 4, 8);
-            _sudokuSolver.SetValue(8, 4, 1);
-            _sudokuSolver.SetValue(4, 5, 2);
-            _sudokuSolver.SetValue(1, 6, 6);
-            _sudokuSolver.SetValue(6, 6, 2);
-            _sudokuSolver.SetValue(7, 6, 8);
-            _sudokuSolver.SetValue(3, 7, 4);
-            _sudokuSolver.SetValue(4, 7, 1);
-            _sudokuSolver.SetValue(5, 7, 9);
-            _sudokuSolver.SetValue(8, 7, 5);
-            _sudokuSolver.SetValue(7, 8, 7);
-            #endregion
+            try
+            {
+                _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Filling Example");
+                #region SetWikipediaExample
+                _sudokuSolver = new();
+                _sudokuSolver.SetValue(1, 0, 3);
+                _sudokuSolver.SetValue(3, 1, 1);
+                _sudokuSolver.SetValue(4, 1, 9);
+                _sudokuSolver.SetValue(5, 1, 5);
+                _sudokuSolver.SetValue(2, 2, 8);
+                _sudokuSolver.SetValue(7, 2, 6);
+                _sudokuSolver.SetValue(0, 3, 8);
+                _sudokuSolver.SetValue(4, 3, 6);
+                _sudokuSolver.SetValue(0, 4, 4);
+                _sudokuSolver.SetValue(3, 4, 8);
+                _sudokuSolver.SetValue(8, 4, 1);
+                _sudokuSolver.SetValue(4, 5, 2);
+                _sudokuSolver.SetValue(1, 6, 6);
+                _sudokuSolver.SetValue(6, 6, 2);
+                _sudokuSolver.SetValue(7, 6, 8);
+                _sudokuSolver.SetValue(3, 7, 4);
+                _sudokuSolver.SetValue(4, 7, 1);
+                _sudokuSolver.SetValue(5, 7, 9);
+                _sudokuSolver.SetValue(8, 7, 5);
+                _sudokuSolver.SetValue(7, 8, 7);
+                #endregion
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"{nameof(SudokuPageViewModel)}: failed to fill example");
+                Board = new string[9, 9];
+            }
 
             UpdateBoard();
         }
@@ -67,7 +82,7 @@ namespace ThreeInOne.ViewModels.Sudoku
         private async Task SolveBoard()
         {
             IsSolved = true;
-
+            _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Started solving board");
             _sudokuSolver ??= new();
             for (int y = 0; y < 9; y++)
             {
@@ -78,13 +93,16 @@ namespace ThreeInOne.ViewModels.Sudoku
                         _sudokuSolver.SetValue(x, y, value);
                 }
             }
+
             var runningTask = Task.Run(() => _sudokuSolver.SolveBoard());
             while (!runningTask.IsCompleted)
                 await Task.Delay(50);
 
+            //TODO: try applying visual filling of board
             if (!runningTask.Result)
             {
                 IsSolved = false;
+                _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Failed to Solve Board");
                 _messenger.Send(new UnableToSolveMessage("Board is unsolvable"));
             }
 
@@ -103,6 +121,7 @@ namespace ThreeInOne.ViewModels.Sudoku
                 }
             }
             Board = board;
+            _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Board updated successfully");
         }
 
         void IRecipient<AddToBoardMessage>.Receive(AddToBoardMessage message)
@@ -122,11 +141,13 @@ namespace ThreeInOne.ViewModels.Sudoku
                         throw new Exception("Invalide Input");
 
                     _sudokuSolver.SetValue(x, y, value);
+                    _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Setting value on Coordinates: {x},{y} was successfull");
                 }
             }
             catch (Exception e)
             {
                 _messenger.Send(new SudokuBoardErrorMessage($"Coordinates:\nX:{x}, Y:{y}\nReturned: {e.Message}"));
+                _logger.LogWarning($"{nameof(SudokuPageViewModel)}: {e.Message}");
                 Board[x, y] = string.Empty;
                 OnPropertyChanged(nameof(Board));
             }

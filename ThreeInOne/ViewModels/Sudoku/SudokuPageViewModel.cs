@@ -141,7 +141,7 @@ namespace ThreeInOne.ViewModels.Sudoku
                         throw new Exception("Invalide Input");
 
                     _sudokuSolver.SetValue(x, y, value);
-                    _logger.LogInformation($"{nameof(SudokuPageViewModel)}: Setting value on Coordinates: {x},{y} was successfull");
+                    //_logger.LogInformation($"{nameof(SudokuPageViewModel)}: Setting value on Coordinates: {x},{y} was successfull");
                 }
             }
             catch (Exception e)

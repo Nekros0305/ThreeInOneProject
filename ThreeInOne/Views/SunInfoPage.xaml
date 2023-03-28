@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ThreeInOne.Views.SunInfoPage"
              xmlns:vm ="clr-namespace:ThreeInOne.ViewModels.SunInfo"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters ="clr-namespace:ThreeInOne.WPFStuff.Converters"
              x:DataType="vm:SunInfoPageViewModel">
     <ContentPage.Resources>
-        <converters:InversBoolean x:Key="InversBoolean"/>
         <converters:HumanizeTimeSpam x:Key="HumanizeTimeSpam"/>
     </ContentPage.Resources>
 
@@ -24,13 +24,13 @@
             <Label Text="Something went wrong, try again later" TextColor="Red"
                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                        IsVisible="{Binding SunInfo.ErrorOnLoading}"/>
-            <Grid IsVisible="{Binding SunInfo.ErrorOnLoading, Converter={StaticResource InversBoolean}}">
+            <Grid IsVisible="{Binding SunInfo.ErrorOnLoading, Converter={toolkit:InvertedBoolConverter}}">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center"
                             IsVisible="{Binding SunInfo.IsLoading}">
                     <Label Text="Loading..." FontSize="26"/>
                     <ActivityIndicator IsRunning="{Binding SunInfo.IsLoading}" Color="Orange"/>
                 </VerticalStackLayout>
-                <Grid IsVisible="{Binding SunInfo.IsLoading, Converter={StaticResource InversBoolean}}">
+                <Grid IsVisible="{Binding SunInfo.IsLoading, Converter={toolkit:InvertedBoolConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="150"/>
                         <RowDefinition/>

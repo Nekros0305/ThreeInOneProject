@@ -4,14 +4,12 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ThreeInOne.Views.SudokuPage"
              xmlns:vm="clr-namespace:ThreeInOne.ViewModels.Sudoku"
-             xmlns:converters="clr-namespace:ThreeInOne.WPFStuff.Converters"
              x:DataType="vm:SudokuPageViewModel"
              Title="SudokuPage" Loaded="ContentPage_Loaded">
     <ContentPage.Resources>
-        <converters:InversBoolean x:Key="InversBoolean"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5,0"/>
-            <Setter Property="IsEnabled" Value="{Binding SolveBoardCommand.IsRunning, Converter={StaticResource InversBoolean}}"/>
+            <Setter Property="IsEnabled" Value="{Binding SolveBoardCommand.IsRunning, Converter={toolkit:InvertedBoolConverter}}"/>
         </Style>
     </ContentPage.Resources>
     <Grid Margin="5" RowDefinitions="50,10,*">

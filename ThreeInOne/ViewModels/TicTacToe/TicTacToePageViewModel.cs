@@ -13,6 +13,14 @@ namespace ThreeInOne.ViewModels.TicTacToe
 {
     public partial class TicTacToePageViewModel : ObservableObject, IDrawable
     {
+        private readonly IMessenger _messenger;
+        public TicTacToePageViewModel()
+        {}
+        public TicTacToePageViewModel(IMessenger messenger)
+        {
+            _messenger = messenger;
+        }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GameStartCommand))]
         [NotifyPropertyChangedFor(nameof(Records))]
@@ -32,7 +40,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
         private PlayerType? _playerX;
         partial void OnPlayerXChanged(PlayerType? value)
         {
-           if (value.PlayerName != "Human")
+            if (value.PlayerName != "Human")
                 PlayerXName = value.PlayerName;
             PlayerXType = value.PlayerCat;
         }
@@ -140,7 +148,7 @@ namespace ThreeInOne.ViewModels.TicTacToe
 
                 //TODO: tell view to update its graphicsView
                 _winLines = CurrentGame?.GetResult()?.TheWinningLine;
-                WeakReferenceMessenger.Default.Send(new GraphicUpdateMessage(string.Empty));
+                _messenger.Send(new GraphicUpdateMessage(string.Empty));
             }
             TakeSpotCommand.NotifyCanExecuteChanged();
         }

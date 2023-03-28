@@ -9,7 +9,6 @@
              xmlns:converters="clr-namespace:ThreeInOne.WPFStuff.Converters"
              x:DataType="vm:TicTacToePageViewModel">
     <ContentPage.Resources>
-        <vm:TicTacToePageViewModel x:Key="WinningLine"/>
         <converters:GameToMessageConverter x:Key="GameToMessageConverter"/>
         <converters:WinRatioToPercentageValue x:Key="WinRatioToPercentageValue"/>
     </ContentPage.Resources>
@@ -74,7 +73,7 @@
                 <Button Grid.Row="2" Grid.Column="1" Text="{Binding Spots[7]}" CommandParameter="7"/>
                 <Button Grid.Row="2" Grid.Column="2" Text="{Binding Spots[8]}" CommandParameter="8"/>
             </Grid>
-            <GraphicsView x:Name="grap" Margin="10" Drawable="{StaticResource WinningLine}" IsVisible="{Binding CurrentGame.IsFinished}"/>
+            <GraphicsView x:Name="grap" Margin="10" Drawable="{vm:TicTacToePageViewModel}" IsVisible="{Binding CurrentGame.IsFinished}"/>
         </Grid>
         <Label Grid.Row="3" Text="{Binding CurrentGame, Mode=OneWay, Converter={StaticResource GameToMessageConverter}}"
                HorizontalOptions="Center" VerticalOptions="Center" FontSize="20"/>

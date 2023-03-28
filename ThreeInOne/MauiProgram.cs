@@ -129,7 +129,7 @@ public static class MauiProgram
 
         sc.AddTransient<SudokuPage>();
         sc.AddTransient<SudokuPageViewModel>();
-        sc.AddTransient<IValueConverter, TwoDimentionalArrayReader>();
+        sc.AddSingleton<IValueConverter, TwoDimentionalArrayReader>();
 
         return sc;
     }

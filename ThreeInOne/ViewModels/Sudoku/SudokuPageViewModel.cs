@@ -6,11 +6,14 @@ using ThreeInOne.Models.Sudoku;
 
 namespace ThreeInOne.ViewModels.Sudoku
 {
-    public partial class SudokuPageViewModel : ObservableObject, IRecipient<AddToBoardMessage>
+    public partial class SudokuPageViewModel : ObservableObject,
+        IRecipient<AddToBoardMessage>
     {
-        public SudokuPageViewModel()
+        private readonly IMessenger _messenger;
+        public SudokuPageViewModel(IMessenger messenger)
         {
-            WeakReferenceMessenger.Default.RegisterAll(this);
+            messenger.RegisterAll(this);
+            _messenger = messenger;
         }
 
         private Solver? _sudokuSolver;
@@ -82,7 +85,7 @@ namespace ThreeInOne.ViewModels.Sudoku
             if (!runningTask.Result)
             {
                 IsSolved = false;
-                WeakReferenceMessenger.Default.Send(new UnableToSolveMessage("Board is unsolvable"));
+                _messenger.Send(new UnableToSolveMessage("Board is unsolvable"));
             }
 
             UpdateBoard();
@@ -123,8 +126,7 @@ namespace ThreeInOne.ViewModels.Sudoku
             }
             catch (Exception e)
             {
-                WeakReferenceMessenger.Default
-                    .Send(new SudokuBoardErrorMessage($"Coordinates:\nX:{x}, Y:{y}\nReturned: {e.Message}"));
+                _messenger.Send(new SudokuBoardErrorMessage($"Coordinates:\nX:{x}, Y:{y}\nReturned: {e.Message}"));
                 Board[x, y] = string.Empty;
                 OnPropertyChanged(nameof(Board));
             }

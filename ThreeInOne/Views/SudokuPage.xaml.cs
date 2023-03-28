@@ -13,14 +13,15 @@ public partial class SudokuPage : ContentPage,
     private readonly SudokuPageViewModel _viewModel;
     private readonly IValueConverter _valueConverter;
     public SudokuPage(SudokuPageViewModel vm,
-        IValueConverter valueConverter)
+        IValueConverter valueConverter,
+        IMessenger messenger)
     {
         InitializeComponent();
         BindingContext = vm;
         _viewModel = vm;
         _valueConverter = valueConverter;
 
-        WeakReferenceMessenger.Default.RegisterAll(this);
+        messenger.RegisterAll(this);
     }
 
     private void ContentPage_Loaded(object sender, EventArgs e)

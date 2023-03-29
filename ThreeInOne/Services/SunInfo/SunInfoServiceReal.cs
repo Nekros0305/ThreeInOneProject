@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ThreeInOne.Interfaces.SunInfo;
 using ThreeInOne.Models.SunInfo;
 

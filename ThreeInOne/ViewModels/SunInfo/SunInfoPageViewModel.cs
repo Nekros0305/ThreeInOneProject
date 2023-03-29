@@ -1,55 +1,51 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
-using ThreeInOne.Interfaces.SunInfo;
+﻿using ThreeInOne.Interfaces.SunInfo;
 using ThreeInOne.Models.SunInfo;
 using ThreeInOne.WPFStuff;
 
-namespace ThreeInOne.ViewModels.SunInfo
+namespace ThreeInOne.ViewModels.SunInfo;
+
+public partial class SunInfoPageViewModel : ObservableObject
 {
-    public partial class SunInfoPageViewModel : ObservableObject
+    private readonly ISunInfoService _sunInfoService;
+    private readonly ILogger<SunInfoPageViewModel> _logger;
+
+    public SunInfoPageViewModel(
+        ISunInfoService sunInfoService,
+        ILogger<SunInfoPageViewModel> logger)
     {
-        private readonly ISunInfoService _sunInfoService;
-        private readonly ILogger<SunInfoPageViewModel> _logger;
+        _sunInfoService = sunInfoService;
+        _logger = logger;
+    }
 
-        public SunInfoPageViewModel(
-            ISunInfoService sunInfoService,
-            ILogger<SunInfoPageViewModel> logger)
+    private LazyProperty<LocalSunInfo>? _sunInfo;
+    public LazyProperty<LocalSunInfo> SunInfo => _sunInfo ??= new LazyProperty<LocalSunInfo>(GetSunInfo);
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+    private bool _executable;
+
+    private async Task<LocalSunInfo> GetSunInfo(CancellationToken cancellationToken)
+    {
+        try
         {
-            _sunInfoService = sunInfoService;
-            _logger = logger;
+            Executable = false;
+            var result = await _sunInfoService.GetSunInfo(cancellationToken);
+            await Task.Delay(1000, cancellationToken);
+            Executable = true;
+            return result;
         }
-
-        private LazyProperty<LocalSunInfo>? _sunInfo;
-        public LazyProperty<LocalSunInfo> SunInfo => _sunInfo ??= new LazyProperty<LocalSunInfo>(GetSunInfo);
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
-        private bool _executable;
-
-        private async Task<LocalSunInfo> GetSunInfo(CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
-            {
-                Executable = false;
-                var result = await _sunInfoService.GetSunInfo(cancellationToken);
-                await Task.Delay(1000, cancellationToken);
-                Executable = true;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"{nameof(SunInfoPageViewModel)}: Failed to get SunInfo");
-                Executable = true;
-                throw;
-            }
+            _logger.LogError(ex, $"{nameof(SunInfoPageViewModel)}: Failed to get SunInfo");
+            Executable = true;
+            throw;
         }
+    }
 
-        [RelayCommand(CanExecute = nameof(Executable))]
-        public void Refresh()
-        {
-            _sunInfo = null;
-            OnPropertyChanged(nameof(SunInfo));
-        }
+    [RelayCommand(CanExecute = nameof(Executable))]
+    public void Refresh()
+    {
+        _sunInfo = null;
+        OnPropertyChanged(nameof(SunInfo));
     }
 }

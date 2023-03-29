@@ -1,5 +1,4 @@
 ﻿using IP2Location;
-using Microsoft.Extensions.Logging;
 using ThreeInOne.Interfaces.SunInfo;
 using ThreeInOne.Models.SunInfo;
 

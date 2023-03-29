@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Markup;
-using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
@@ -62,7 +60,7 @@ public static class MauiProgram
         var logPath = Path.Combine(FileSystem.AppDataDirectory, "Logs", "log.txt");
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Error) //was set to Error to avoid Warnings in Logfile about bad implementations in Sudoku
             .Enrich.FromLogContext()
             .WriteTo.File(logPath, flushToDiskInterval: new TimeSpan(0, 0, 30), encoding: System.Text.Encoding.UTF8, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 3)
             .CreateLogger();

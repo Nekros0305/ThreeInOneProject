@@ -1,6 +1,3 @@
-using CommunityToolkit.Maui.Behaviors;
-using CommunityToolkit.Maui.Markup;
-using CommunityToolkit.Mvvm.Messaging;
 using ThreeInOne.Models.Sudoku;
 using ThreeInOne.ViewModels.Sudoku;
 

@@ -1,4 +1,6 @@
-﻿namespace ThreeInOne.ViewModels;
+﻿using Microsoft.Windows.System;
+
+namespace ThreeInOne.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
@@ -6,7 +8,7 @@ public partial class MainPageViewModel : ObservableObject
     private string _displaytext = "Click Me";
 
     [ObservableProperty]
-    private string _name = "World!";
+    private string _user = Preferences.Default.Get("userName", string.Empty);
 
     private int _count = 0;
     [RelayCommand]
